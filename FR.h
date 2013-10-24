@@ -2,7 +2,7 @@
 
 #include<vector>
 
-#define SECTOR_PER_FR 2
+#define SECTORS_PER_FR 2
 
 #define SAFE_RELEASE_SINGLE_POINTER(pointer)\
     if(pointer != NULL)\
@@ -21,6 +21,7 @@ class FRHeader
 public:
     BYTE* data;
 
+    BYTE magicNumber[4];
     WORD offsetToTheSequencceOfAttributesPart;
     DWORD realSizeOfFR;
     WORD flags;

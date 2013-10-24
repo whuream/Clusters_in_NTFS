@@ -4,6 +4,7 @@ FRHeader::FRHeader(BYTE* _data)
 {
     data = _data;
 
+    memcpy(magicNumber, data + 0, 4);
     offsetToTheSequencceOfAttributesPart = *(WORD *)(data + 0x14);
     flags = *(WORD*)(data + 0x16);
     realSizeOfFR = *(DWORD *)(data + 0x18);
@@ -203,6 +204,10 @@ FR::FR(BYTE* _data)
             aBitmap = new attribute<attributeBitmapContent>(data + offset);
         }
         offset += tmp.lenth;
+        if(tmp.lenth <=0)
+        {
+            offset ++;
+        }
     }
 }
 
