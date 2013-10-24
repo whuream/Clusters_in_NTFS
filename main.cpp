@@ -35,7 +35,7 @@ int main()
         bootSector bs(data);
         bs.sectorsPerCluster++;
     }
-    UINT64 num = 6291536;
+    UINT64 num = 6291528;
     if(!getSectorData("G", num, data))
     {
         FRHeader FRH(data);

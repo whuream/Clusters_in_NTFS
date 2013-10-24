@@ -38,6 +38,8 @@ class clasterFragments
 public:
     UINT64 begin;
     UINT64 lenth;
+
+    clasterFragments();
 };
 
 class runList
@@ -66,6 +68,7 @@ public:
     UINT64 realSizeOfTheStream;
     runList *run;
 
+    DWORD realOffsetToTheContentPart;
     bool isResident;
 
     attributeHeader(BYTE* _data);
@@ -83,7 +86,6 @@ public:
     attributeNAMEContent(BYTE* _data);
     ~attributeNAMEContent();
 };
-
 
 class attributeDATAContent
 {

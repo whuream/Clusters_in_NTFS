@@ -15,11 +15,17 @@ FRHeader::FRHeader(BYTE* _data)
     isMainFR = fileReferenceToTheBaseFileRecord == 0 ? true: false;
 }
 
+clasterFragments::clasterFragments()
+{
+    begin = 0;
+    lenth = 0;
+}
+
 runList::runList(BYTE* _data)
 {
     data = _data;
     BYTE *off = data;
-    while(*off != 0 || (off - data) <= 0xFFFF)
+    while(*off != 0 && (off - data) <= 0xFFFF)
     {
         BYTE sizeOflenth = *off & 0x0F;
         BYTE sizeOfOffset = (*off & 0xF0)>>4;
@@ -57,6 +63,29 @@ attributeHeader::attributeHeader(BYTE* _data)
 
     offsetToTheContentPart = *(WORD*)(data + 0xA);
     isResident = nonResidentFlag == 0;
+
+    if(offsetToTheContentPart != 0)
+    {
+        realOffsetToTheContentPart = offsetToTheContentPart;
+    }
+    else
+    {
+        if(isResident)
+        {
+            if(lenthOfTheStream != 0)
+            {
+                realOffsetToTheContentPart = lenthOfTheStream;
+            }
+            else
+            {
+                realOffsetToTheContentPart = 0x18;
+            }
+        }
+        else
+        {
+            realOffsetToTheContentPart = 0x40;
+        }
+    }
     
     if(isResident)
     {
@@ -83,9 +112,9 @@ attributeHeader::~attributeHeader()
 attributeNAMEContent::attributeNAMEContent(BYTE* _data)
 {
     data = _data;
-    nameLenth = *(BYTE*)(data + 40);
+    nameLenth = *(BYTE*)(data + 0x40);
     fileName = new BYTE[nameLenth * 2];
-    memcpy(fileName, data + 42, nameLenth * 2);
+    memcpy(fileName, data + 0x42, nameLenth * 2);
 }
 
 attributeNAMEContent::~attributeNAMEContent()
@@ -121,7 +150,7 @@ attribute<T>::attribute(BYTE* _data)
     header = new attributeHeader(data);
     if(header->isResident)
     {
-        content = new T(data + header->offsetToTheContentPart);
+        content = new T(data + header->realOffsetToTheContentPart);
     }
     else
     {
@@ -156,7 +185,6 @@ FR::FR(BYTE* _data)
         if(tmp.type == 0x30)
         {
             aName = new attribute<attributeNAMEContent>(data + offset);
-            //offset += aName->header->
         }
         else if(tmp.type == 0x80)
         {
@@ -174,6 +202,7 @@ FR::FR(BYTE* _data)
         {
             aBitmap = new attribute<attributeBitmapContent>(data + offset);
         }
+        offset += tmp.lenth;
     }
 }
 
