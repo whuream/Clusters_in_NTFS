@@ -180,7 +180,7 @@ FR::FR(BYTE* _data)
     data = _data;
     FRH = new FRHeader(_data);
     DWORD offset = FRH->offsetToTheSequencceOfAttributesPart;
-    while(offset <= FRH->realSizeOfFR)
+    while(offset <= FRH->realSizeOfFR && data[offset] != 0xFF)
     {
         attributeHeader tmp(data + offset);
         if(tmp.type == 0x30)
@@ -206,6 +206,7 @@ FR::FR(BYTE* _data)
         offset += tmp.lenth;
         if(tmp.lenth <=0)
         {
+            fprintf(stderr, "\nerror in FR");
             offset ++;
         }
     }
