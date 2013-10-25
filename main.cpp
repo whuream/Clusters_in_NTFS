@@ -17,7 +17,7 @@ INT32 openDisk(string logicDriverName, HANDLE &hDisk)
     UINT32 index = 0;
     for(;index < MAX_OPEN_COUNT; index ++)
     {
-        hDisk = CreateFile(add.c_str(), GENERIC_READ, FILE_SHARE_READ,\
+        hDisk = CreateFile(add.c_str(), GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,\
         NULL, OPEN_EXISTING, NULL, NULL);
         if(hDisk != INVALID_HANDLE_VALUE)
         {
@@ -129,7 +129,7 @@ INT32 main()
     char name[1000];
     fprintf(stdout, "输入文件所在盘符（例如：C）：");
     fscanf_s(stdin, "%s", &logicDriverName, 2);
-    fprintf(stdout, "输入文件名（只支持英文）（例如：small.txt）：");
+    fprintf(stdout, "输入文件名（只支持英文）（例如：$MFT）：");
     fscanf_s(stdin, "%s", name, sizeof(name));
     
     INT32 res = 0;
