@@ -7,6 +7,7 @@
 using namespace std;
 
 #include<stdio.h>
+#include<stdlib.h>
 
 #define MAX_FILE_COUNT 100000
 #define MAX_OPEN_COUNT 1
@@ -18,7 +19,7 @@ INT32 openDisk(string logicDriverName, HANDLE &hDisk)
     for(;index < MAX_OPEN_COUNT; index ++)
     {
         hDisk = CreateFile(add.c_str(), GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,\
-        NULL, OPEN_EXISTING, NULL, NULL);
+        NULL, OPEN_EXISTING, 0, NULL);
         if(hDisk != INVALID_HANDLE_VALUE)
         {
             break;
@@ -123,14 +124,20 @@ INT32 searchFile(HANDLE hDisk, string filename, INT64 &offset)
     return 0;
 }
 
-INT32 main()
+INT32 main(int argc, char **argv)
 {
-    char logicDriverName[100];
-    char name[1000];
-    fprintf(stdout, "输入文件所在盘符（例如：C）：");
-    fscanf_s(stdin, "%s", &logicDriverName, 2);
-    fprintf(stdout, "输入文件名（只支持英文）（例如：$MFT）：");
-    fscanf_s(stdin, "%s", name, sizeof(name));
+    if(argc != 3)
+    {
+        fprintf(stderr, "useage: %s <logicDriverName> <fileName>", argv[0]);
+        return -1;
+    }
+     
+    char *logicDriverName = argv[1];
+    char *name = argv[2];
+    //fprintf(stdout, "输入文件所在盘符（例如：C）：");
+    //fscanf(stdin, "%s", &logicDriverName);
+    //fprintf(stdout, "输入文件名（只支持英文）（例如：$MFT）：");
+    //fscanf(stdin, "%s", name);
     
     INT32 res = 0;
     INT64 sectorNum = 0;
@@ -140,7 +147,7 @@ INT32 main()
     if(res != 0)
     {
         fprintf(stderr, "\nopen disk failed");
-        std::system("pause");
+        //system("pause");
         return res;
     }
 
@@ -172,7 +179,7 @@ INT32 main()
         printf("\nfile not found");
     }
     printf("\n");
-    std::system("pause");
+    //system("pause");
 
     return 0;
 }

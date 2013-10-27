@@ -2,6 +2,8 @@
 
 #include<vector>
 
+#include<stdio.h>
+
 #define SECTORS_PER_FR 2
 
 #define SAFE_RELEASE_SINGLE_POINTER(pointer)\
