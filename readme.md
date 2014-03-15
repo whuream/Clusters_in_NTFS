@@ -1,18 +1,20 @@
-## 在NTFS文件系统中得到文件的簇序列
+# Get File Clusters in NTFS
 	
-按照文件名在磁盘中搜索File Record，直到搜索到相应的文件，并解析出其族片段。
+Get file record from file name and resolve cluster segments
 
-### How to use
+## Developer Dependencies
 
-注意：win7/8下使用可能需要管理员权限
+*   windows xp/7/8
 
-### TODO
+## Usage
 
-* 解析文件目录，按路径搜索文件
+`CNTFS.exe <logicDriverName> <filename>`
 
-* 增加对非法的File Record支持
+![snapshot](./sample/CNTFS.png)
+![snapshot](./sample/CNTFS-2.png)
 
-* 增加对压缩的文件支持
+## cautions
 
-* 解析更多的文件属性
+*   `filename` is a file's name but not a file's path and name
 
+*   administrator privilege may needed
