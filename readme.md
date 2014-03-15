@@ -18,3 +18,7 @@ Get file record from file name and resolve cluster segments
 *   `filename` is a file's name but not a file's path and name
 
 *   administrator privilege may needed
+
+## Algorithm
+
+brute search File Records in order until find the specific file name or scan `MAX_FILE_COUNT` files
